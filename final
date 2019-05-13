@@ -1,0 +1,79 @@
+import glob
+import glob, os
+import re
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+population= open("C:\\Python2Class\\PROJECTS\\PROJECT1\\population.csv","r")
+myemail= open("C:\\Python2Class\\PROJECTS\\PROJECT1\\myemail.csv", "r")
+file1=open("C:\\Python2Class\\PROJECTS\\PROJECT1\\file1.csv","w")
+exception=open("C:\\Python2Class\\PROJECTS\\PROJECT1\\exception.csv","w")
+idnum_my=[]
+email_my=[]
+
+
+def checkEmail(email):
+
+        #email = 'derr@aolcom'
+        if re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                return 1
+        else:
+                return 0
+for line in myemail:
+        line=line.strip()
+        elements_m=line.split(",")
+        idnum_my.append(elements_m[2])
+        email_my.append(elements_m[3])
+                   
+for line in population:
+        line=line.strip()
+        elements_p= line.split(",")
+        first_p=elements_p[0]
+        last_p=elements_p[1]
+        idnum_p=elements_p[2]
+        email_p=elements_p[3]
+        ans=checkEmail(email_p)
+        if ans==1:
+                domain,adress= elements_p[3].split("@")
+                if adress=="dillard.edu":
+                        file1.write(line)
+                        file1.write("\n")
+                elif adress!="dillard.edu":
+                        if idnum_p not in idnum_my:
+                                exception.write(line)
+                                exception.write("\n")
+                        elif idnum_p in idnum_my:
+                                file1.write(first_p+","+last_p+","+idnum_p+","+email_my[idnum_my.index(idnum_p)])
+                                file1.write("\n")
+        elif ans==0:
+                exception.write(line)
+                exception.write("\n")
+                continue
+host='smtp.gmail.com'
+port=587
+        
+userName='dillarditt@gmail.com'
+to='ckonyaole@dillard.edu'
+password='semester2018'
+email_subject="final"
+        
+message=MIMEMultipart()
+message['From']=userName
+message['To']=userName
+        
+filename="exception.csv"
+openfile=open(filename,"r")
+        
+mimref=MIMEBase('application','octect_stream')
+mimref.set_payload((openfile.read()))
+encoders.encode_base64(mimref)
+mimref.add_header('Content-Disposition','openfile;filename='+filename)
+message.attach(mimref)
+        
+host = smtplib.SMTP(host,port)
+host.starttls()
+host.login(userName, password)
+host.sendmail(userName, to, message.as_string())
+host.quit()
+                      
