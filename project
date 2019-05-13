@@ -1,0 +1,33 @@
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+
+host='smtp.gmail.com'
+port=587
+
+userName='dillarditt@gmail.com'
+to='ckonyaole@dillard.edu'
+password='semester2018'
+email_subject="final"
+
+message=MIMEMultipart()
+message['From']=userName
+message['To']=userName
+
+filename="project1.py"
+openfile=open(filename,"r")
+
+mimref=MIMEBase('application','octect_stream')
+mimref.set_payload((openfile.read()))
+encoders.encode_base64(mimref)
+mimref.add_header('Content-Disposition','openfile;filename='+filename)
+message.attach(mimref)
+
+host = smtplib.SMTP(host,port)
+host.starttls()
+host.login(userName, password)
+host.sendmail(userName, to, message.as_string())
+host.quit()
+    
+
