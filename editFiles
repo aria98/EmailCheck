@@ -1,0 +1,55 @@
+import glob
+import glob, os
+file= open("C:\\python2class\\files\\Aria.Lowery\international.csv", "r")
+china=open("C:\\python2class\\Homework4\\AriaLowery\\china.txt","w")
+france=open("C:\\python2class\\Homework4\\AriaLowery\\france.txt","w")
+brazil=open("C:\\python2class\\Homework4\\AriaLowery\\brazil.txt","w")
+males=0
+females=0
+chineese_males=0
+french_males=0
+brazilian_males=0
+chineese_females=0
+french_females=0
+brazilian_females=0
+for line in file:
+    line=line.strip()
+    mystring=line.split(",")
+    if (mystring[5]=="China"):
+        if (mystring[4]=="Male"):
+            china.write(mystring[0]+","+mystring[1]+","+mystring[2]+","+mystring[3]+","+"Female, "+mystring[5]) 
+            china.write("\n")
+        if(mystring[4]=="Female"):
+            china.write(mystring[0]+","+mystring[1]+","+mystring[2]+","+mystring[3]+","+"Male, "+mystring[5])
+            china.write("\n")
+    if (mystring[5]=="France"):
+        france.write(mystring[0]+","+mystring[1]+","+mystring[2]+","+mystring[3]+","+mystring[4]+", Louisiana")
+        france.write("\n")
+    if(mystring[5]=="Brazil"):
+        sep="@"
+        first=mystring[3].split(sep)
+        brazil.write(mystring[0]+","+mystring[1]+","+mystring[2]+","+first[0]+"@dillard.edu"+","+mystring[4]+","+mystring[5])
+        brazil.write("\n")
+    if(mystring[4]=="Male"):
+        males=males+1
+    if(mystring[4]=="Female"):
+            females=females+1        
+    if(mystring[4]=="Male" and mystring[5]=="China"):
+        chineese_males=chineese_males+1
+    if(mystring[4]=="Male" and mystring[5]=="France"):
+                french_males=french_males+1 
+    if(mystring[4]=="Male" and mystring[5]=="Brazil"):
+                brazilian_males=brazilian_males+1       
+    if(mystring[4]=="Female" and mystring[5]=="China"):
+        chineese_females=chineese_females+1
+    if(mystring[4]=="Female" and mystring[5]=="France"):
+            french_females=french_females+1
+    if(mystring[4]=="Female" and mystring[5]=="Brazil"):
+            brazilian_females=brazilian_females+1    
+
+rate_china_male=((chineese_males)/(males))*100
+rate_china_female=((chineese_females)/(females))*100
+print("The rate of males in China is "+str(rate_china_male)+" %")
+print("The rate of females in China is "+str(rate_china_female)+" %")
+print("China has the most males.")
+print("China has the most females.")
